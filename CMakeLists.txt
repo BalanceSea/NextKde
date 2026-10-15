@@ -139,6 +139,11 @@ if(BUILD_TESTING)
                 ${CMAKE_CURRENT_SOURCE_DIR}/shell/desktop/modules/bar/test_status_editor_panel.mjs
         )
         set_tests_properties(kos-shell.status-editor-panel PROPERTIES TIMEOUT 10)
+        add_test(NAME kos-shell.network-traffic-width
+            COMMAND ${KOS_NODE_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/shell/desktop/modules/bar/test_network_traffic_width.mjs
+        )
+        set_tests_properties(kos-shell.network-traffic-width PROPERTIES TIMEOUT 10)
         add_test(NAME kos-shell.visibility-policy
             COMMAND ${KOS_NODE_EXECUTABLE}
                 ${CMAKE_CURRENT_SOURCE_DIR}/shell/desktop/modules/common/test_visibility_policy.mjs
