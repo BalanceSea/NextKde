@@ -21,6 +21,10 @@ ColumnLayout {
     property bool showGlassMaterial: true
     property bool showIconAppearance: true
     property bool showSpatialWallpaper: false
+    // The text-rendering choice is not part of the glass style, so it gets its
+    // own flag instead of riding on showGlassMaterial: that section only exists
+    // under Material, which would hide the switch for every other shell style.
+    property bool showTextRendering: false
 
     property var bridge: null
     property real blurStrength: 0.42
@@ -301,7 +305,7 @@ ColumnLayout {
     }
 
     Text {
-        visible: displayPage.showGlassMaterial
+        visible: displayPage.showTextRendering
         text: I18n.tr("Text rendering").toUpperCase()
         color: colors.secondaryText
         font.pixelSize: 12
@@ -310,10 +314,10 @@ ColumnLayout {
     }
 
     Rectangle {
-        // Part of the glass-material section, but not of the glass style: it
-        // applies under Material as well, which is why it is its own card
-        // rather than a third row in the style card above.
-        visible: displayPage.showGlassMaterial
+        // Its own section rather than a third row in the glass-style card: the
+        // card above only exists under Material, and this choice applies to
+        // every shell style.
+        visible: displayPage.showTextRendering
         Layout.fillWidth: true
         implicitHeight: 72
         radius: 18

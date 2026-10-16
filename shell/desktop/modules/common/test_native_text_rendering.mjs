@@ -60,6 +60,22 @@ assert.match(page,
 assert.match(page,
     /LiquidControls\.LiquidGlassSwitch \{[\s\S]{0,400}?checked: displayPage\.nativeTextRendering[\s\S]{0,300}?onToggled:[\s\S]{0,120}?saveNativeTextRendering\(checked\)/,
     "the switch is wired to that write path")
+// The card must live in the appearance section every shell style shows. Riding
+// on showGlassMaterial put it inside the Material-only instance, which hid the
+// switch for every other style -- a user on the macOS style could not reach it.
+assert.match(page, /property bool showTextRendering: false/,
+    "the page has its own flag for the text-rendering section")
+assert.match(page, /visible: displayPage\.showTextRendering\s*\n\s*text: I18n\.tr\("Text rendering"\)/,
+    "the section header follows that flag")
+const themePage = read("apps/settings/pages/ThemeSettingsPage.qml")
+const materialInstance = themePage.match(/id: themeMaterialSettings[\s\S]*?(?=id: globalAppearanceSettings)/)?.[0] ?? ""
+const globalInstance = themePage.match(/id: globalAppearanceSettings[\s\S]*?(?=WidgetAppearanceSection \{)/)?.[0] ?? ""
+assert.ok(materialInstance.length > 0 && globalInstance.length > 0,
+    "both appearance instances are present to be told apart")
+assert.match(globalInstance, /showTextRendering: true/,
+    "the always-visible instance shows the text-rendering section")
+assert.doesNotMatch(materialInstance, /showTextRendering: true/,
+    "the Material-only instance does not show it a second time")
 for (const text of ["Text rendering", "Grayscale text rendering",
                     "Letters no longer carry coloured edges over the glass",
                     "Letters can carry coloured edges over the glass"])
