@@ -192,6 +192,7 @@ Item {
     // Shared cell styling: every column takes the readout's single ink, outline
     // and font policy, so the three cells of a row can never drift apart.
     component RateCell: Text {
+    renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
         required property real columnWidth
         required property int cellAlignment
 

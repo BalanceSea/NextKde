@@ -182,11 +182,13 @@ AnimatedPopupWindow {
             RowLayout {
                 Layout.fillWidth: true
                 Text {
+                renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                     text: I18n.tr("Status Area")
                     color: editor.foregroundColor
                     font { pixelSize: 14; weight: Font.DemiBold }
                 }
                 Text {
+                renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                     text: I18n.tr("Drag to reorder, tap to show or hide")
                     color: editor.foregroundColor
                     opacity: 0.58
@@ -201,6 +203,7 @@ AnimatedPopupWindow {
                             editor.foregroundColor.g,
                             editor.foregroundColor.b, 0.10))
                     Text {
+                    renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                         anchors.centerIn: parent
                         text: I18n.tr("Done")
                         color: AppearanceTokens.surface.pick(
@@ -248,18 +251,21 @@ AnimatedPopupWindow {
                             anchors.centerIn: parent
                             spacing: 3
                             Text {
+                            renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: editor.symbols[cellCard.modelData]
                                 color: editor.foregroundColor
                                 font.pixelSize: 19
                             }
                             Text {
+                            renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: editor.labels[cellCard.modelData]
                                 color: editor.foregroundColor
                                 font { pixelSize: 10; weight: Font.DemiBold }
                             }
                             Text {
+                            renderType: AppearanceConfigService.nativeTextRendering ? Text.NativeRendering : Text.QtRendering
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 text: cellCard.requiredCell
                                     ? I18n.tr("Pinned") : (cellCard.active ? "−" : "+")

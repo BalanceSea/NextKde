@@ -29,6 +29,7 @@ ColumnLayout {
     property string shellStyle: "macos"
     readonly property bool isMaterialDesign: shellStyle === "material"
     property bool glassFollowsAppearanceMode: false
+    property bool nativeTextRendering: false
     property bool spatialWallpaperEnabled: false
     property bool blurDirty: false
     property bool liquidDirty: false
@@ -57,6 +58,8 @@ ColumnLayout {
         displayPage.shellStyleObserved(shellStyle)
         if (state.glassFollowsAppearanceMode !== undefined)
             glassFollowsAppearanceMode = !!state.glassFollowsAppearanceMode
+        if (state.nativeTextRendering !== undefined)
+            nativeTextRendering = !!state.nativeTextRendering
         spatialWallpaperEnabled = !!state.spatialWallpaperEnabled
         blurDirty = false
         liquidDirty = false
@@ -152,6 +155,12 @@ ColumnLayout {
         if (!bridge)
             return
         bridge.updateGlassFollowsAppearanceMode(checked)
+    }
+
+    function saveNativeTextRendering(checked) {
+        if (!bridge)
+            return
+        bridge.updateNativeTextRendering(checked)
     }
 
     Connections {
@@ -285,6 +294,75 @@ ColumnLayout {
                         onToggled: function(checked) {
                             displayPage.saveGlassFollowsAppearanceMode(checked)
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    Text {
+        visible: displayPage.showGlassMaterial
+        text: I18n.tr("Text rendering").toUpperCase()
+        color: colors.secondaryText
+        font.pixelSize: 12
+        font.weight: Font.DemiBold
+        Layout.leftMargin: 13
+    }
+
+    Rectangle {
+        // Part of the glass-material section, but not of the glass style: it
+        // applies under Material as well, which is why it is its own card
+        // rather than a third row in the style card above.
+        visible: displayPage.showGlassMaterial
+        Layout.fillWidth: true
+        implicitHeight: 72
+        radius: 18
+        color: colors.card
+
+        Item {
+            anchors.fill: parent
+
+            RowLayout {
+                anchors.fill: parent
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                spacing: 12
+
+                Controls.SettingIcon {
+                    colors: displayPage.colors
+                    materialForm: displayPage.materialForm
+                    symbol: "◉"
+                    tint: "#8e8e93"
+                }
+                ColumnLayout {
+                    Layout.fillWidth: true
+                    spacing: 2
+                    Text {
+                        text: I18n.tr("Grayscale text rendering")
+                        color: colors.primaryText
+                        font.pixelSize: 14
+                        font.weight: Font.DemiBold
+                    }
+                    Text {
+                        // The user-visible symptom, not the API name: this is
+                        // the row that explains why the letters carried colour.
+                        text: displayPage.nativeTextRendering
+                            ? I18n.tr("Letters no longer carry coloured edges over the glass")
+                            : I18n.tr("Letters can carry coloured edges over the glass")
+                        color: colors.secondaryText
+                        font.pixelSize: 11
+                        wrapMode: Text.Wrap
+                        Layout.fillWidth: true
+                    }
+                }
+                LiquidControls.LiquidGlassSwitch {
+                    width: 64
+                    height: 25
+                    checked: displayPage.nativeTextRendering
+                    accentColor: colors.accent
+                    trackColor: colors.divider
+                    onToggled: function(checked) {
+                        displayPage.saveNativeTextRendering(checked)
                     }
                 }
             }
